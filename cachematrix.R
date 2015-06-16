@@ -1,40 +1,60 @@
-## Put comments here that give an overall description of what your
-## functions do
-
-## Write a short comment describing this function
 
 makeCacheMatrix <- function(x = matrix()) {
-  inv <- NULL
-  set <- function(y) {
-    x <- y
+    #check is a square matrix
+    if(nrow(x) != ncol(x)) stop("Matrix must be square")
+    #initialize empty inverse matrix
     inv <- NULL
-  }
+    
+    #declare setter function
+    set <- function(y) {
+        #check is a square matrix
+        if(nrow(y) != ncol(y)) stop("Matrix must be square")
+        #set internal variables values
+        x <<- y
+        inv <<- NULL
+    }
   
-  get <- function() x
-  
-  getinv <- function() inv
-  setinv <- function(yi ) {
-    inv <- yi
-  }
-  
-  list(set = set, get = get, getinv = getinv, setinv = setinv)
+    #define get internal matrix function
+    get <- function() x
+        
+    #define get internal reverse matrix function
+    getinv <- function() inv
+    
+    #define set internal reverse matrix function
+    
+    setinv <- function(yi ) {
+        inv <<- yi
+    }
+    #return created functions to environment
+    list(set = set, get = get, getinv = getinv, setinv = setinv)
   
 }
 
-
-## Write a short comment describing this function
+# Declare cacheSolve function
 
 cacheSolve <- function(x, ...) {
-  inv <- x$getinv
-  if(!is.null(inv))
-  {
-      message("Got inverse matrix from cache")
-      return(inv)
-  }
-  
-  m <- x$get()
-  inv <- solve(m)
-  x$setinv(inv)
-  inv
-        ## Return a matrix that is the inverse of 'x'
+    #get inverse matrix from the objectc
+    inv <- x$getinv()
+    # Check if inverse matrix is already calculated
+    if(!is.null(inv))
+    {
+        #show info message
+        message("Got inverse matrix from cache")
+        #return previous result
+        return(inv)
+    }
+    
+    #if inverse matrix not cached try to find id
+    #get original matrix from the object
+    m <- x$get()
+    #solve reverse matrix for original
+    inv <- solve(m)
+    #call setter for reverse matrix
+    x$setinv(inv)
+    #return reverse matrix 
+    inv
+
 }
+
+
+
